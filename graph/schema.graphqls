@@ -1,0 +1,131 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+# go run github.com/99designs/gqlgen generate to generate
+
+type User {
+  id: ID!
+  full_name: String!
+  email: String!
+  profile: UserProfile
+}
+
+input NewUser {
+  full_name: String!
+  email: String!
+  profile: UserProfileInput!
+}
+
+enum Role {
+  INVESTOR
+  ADVISOR
+}
+
+enum FocusArea {
+  SEED
+  EARLY_STAGE
+  GROWTH
+  MATURE
+}
+
+enum DealPreference {
+  EQUITY
+  CONVERTIBLE_NOTES
+  CASH_INVESTMENTS
+}
+
+enum EngagementType {
+  HANDS_ON_OPERATIONAL_SUPPORT
+  STRATEGIC_OVERSIGHT
+}
+
+type RoleFocus {
+  role: [Role]
+  focusAreas: String
+}
+
+type InvestmentRange {
+  fromUsd: Float
+  toUsd: Float
+}
+
+type InvestmentSizeAdvisoryFee {
+  investmentRange: InvestmentRange
+  advisoryFeeUsdPerHour: Float
+}
+
+type EngagementLevel {
+  type: [EngagementType]
+  details: String
+}
+
+type NetworkAndValue {
+  network: String
+  additionalSupport: String
+}
+
+type SuccessMetrics {
+  primaryMetrics: [String]
+  measurementMethod: String
+}
+
+type UserProfile {
+  roleFocus: RoleFocus
+  industryExpertise: [String]
+  geographicPreference: [String]
+  investmentAdvisoryStage: [FocusArea]
+  investmentRangeAdvisoryFee: InvestmentSizeAdvisoryFee
+  dealStructurePreferences: [DealPreference]
+  engagementLevel: EngagementLevel
+  keyStrengths: [String]
+  networkAndValueAdd: NetworkAndValue
+  successMetrics: SuccessMetrics
+}
+
+input RoleFocusInput {
+  role: [Role]
+  focusAreas: String
+}
+
+input InvestmentRangeInput {
+  fromUsd: Float
+  toUsd: Float
+}
+
+input InvestmentSizeAdvisoryFeeInput {
+  investmentRange: InvestmentRangeInput
+  advisoryFeeUsdPerHour: Float
+}
+
+input EngagementLevelInput {
+  type: [EngagementType]
+  details: String
+}
+
+input NetworkAndValueInput {
+  network: String
+  additionalSupport: String
+}
+
+input SuccessMetricsInput {
+  primaryMetrics: [String]
+  measurementMethod: String
+}
+
+input UserProfileInput {
+  roleFocus: RoleFocusInput
+  industryExpertise: [String]
+  geographicPreference: [String]
+  investmentAdvisoryStage: [FocusArea]
+  investmentRangeAdvisoryFee: InvestmentSizeAdvisoryFeeInput
+  dealStructurePreferences: [DealPreference]
+  engagementLevel: EngagementLevelInput
+  keyStrengths: [String]
+  networkAndValueAdd: NetworkAndValueInput
+  successMetrics: SuccessMetricsInput
+}
+
+type Mutation {
+  createUser(input: NewUser!): User!
+}
