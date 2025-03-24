@@ -6,86 +6,57 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/furre-dev/homelaan-gql/graph/model"
+	"github.com/furre-dev/homelaan-go-backend/graph/model"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	userProfile := &model.UserProfile{
-		IndustryExpertise:       input.Profile.IndustryExpertise,
-		GeographicPreference:    input.Profile.GeographicPreference,
-		InvestmentAdvisoryStage: input.Profile.InvestmentAdvisoryStage,
-		KeyStrengths:            input.Profile.KeyStrengths,
-		RoleFocus: &model.RoleFocus{
-			Role:       input.Profile.RoleFocus.Role,
-			FocusAreas: input.Profile.RoleFocus.FocusAreas,
+	userProfile := &model.InvestorProfile{
+		RoleFocus:               (*model.RoleFocus)(input.InvestorProfile.RoleFocus),
+		IndustryExpertise:       input.InvestorProfile.IndustryExpertise,
+		GeographicPreference:    input.InvestorProfile.GeographicPreference,
+		InvestmentAdvisoryStage: input.InvestorProfile.InvestmentAdvisoryStage,
+		InvestmentRangeAdvisoryFee: &model.InvestmentRangeAndFee{
+			InvestmentRange:       (*model.InvestmentRange)(input.InvestorProfile.InvestmentRangeAdvisoryFee.InvestmentRange),
+			AdvisoryFeeUsdPerHour: input.InvestorProfile.InvestmentRangeAdvisoryFee.AdvisoryFeeUsdPerHour,
 		},
-		InvestmentRangeAdvisoryFee: &model.InvestmentSizeAdvisoryFee{
-			InvestmentRange:       (*model.InvestmentRange)(input.Profile.InvestmentRangeAdvisoryFee.InvestmentRange),
-			AdvisoryFeeUsdPerHour: input.Profile.InvestmentRangeAdvisoryFee.AdvisoryFeeUsdPerHour,
-		},
-		DealStructurePreferences: input.Profile.DealStructurePreferences,
-		EngagementLevel: &model.EngagementLevel{
-			Type:    input.Profile.EngagementLevel.Type,
-			Details: input.Profile.EngagementLevel.Details,
-		},
-		NetworkAndValueAdd: &model.NetworkAndValue{
-			Network:           input.Profile.NetworkAndValueAdd.Network,
-			AdditionalSupport: input.Profile.NetworkAndValueAdd.AdditionalSupport,
-		},
-		SuccessMetrics: &model.SuccessMetrics{
-			PrimaryMetrics:    input.Profile.SuccessMetrics.PrimaryMetrics,
-			MeasurementMethod: input.Profile.SuccessMetrics.MeasurementMethod,
-		},
+		DealStructurePreferences: input.InvestorProfile.DealStructurePreferences,
+		EngagementLevel:          (*model.EngagementLevel)(input.InvestorProfile.EngagementLevel),
+		KeyStrengths:             input.InvestorProfile.KeyStrengths,
+		NetworkAndValueAdd:       (*model.NetworkValueAdd)(input.InvestorProfile.NetworkAndValueAdd),
+		SuccessMetrics:           input.InvestorProfile.SuccessMetrics,
 	}
 
-	newUser := &model.User{
-		FullName: input.FullName,
-		Email:    input.Email,
-		Profile:  userProfile,
+	userAttributes := &model.User{
+		FullName:        input.FullName,
+		Email:           input.Email,
+		InvestorProfile: userProfile,
 	}
 
-	query := `
-WITH inserted_user AS (
-    INSERT INTO user_account (full_name, email)
-    VALUES ($1, $2)
-    RETURNING id
-), inserted_profile AS (
-    INSERT INTO user_profile (user_id, industry_expertise, geographic_preference, investment_advisory_stage, key_strengths)
-    VALUES ((SELECT id FROM inserted_user), $3, $4, $5, $6)
-    RETURNING id
-)
-INSERT INTO role_focus (user_profile_id, role, focus_areas)
-VALUES ((SELECT id FROM inserted_profile), $7, $8);
-
-INSERT INTO investment_range_advisory_fee (user_profile_id, from_usd, to_usd, advisory_fee_usd_per_hour)
-VALUES ((SELECT id FROM inserted_profile), $9, $10, $11);
-
-INSERT INTO deal_structure_preferences (user_profile_id, deal_preferences)
-VALUES ((SELECT id FROM inserted_profile), $12);
-
-INSERT INTO engagement_level (user_profile_id, type, details)
-VALUES ((SELECT id FROM inserted_profile), $13, $14);
-
-INSERT INTO network_and_value_add (user_profile_id, network, additional_support)
-VALUES ((SELECT id FROM inserted_profile), $15, $16);
-
-INSERT INTO success_metrics (user_profile_id, primary_metrics, measurement_method)
-VALUES ((SELECT id FROM inserted_profile), $17, $18);
-`
-	err := r.DB.QueryRow(ctx, query, newUser.FullName, newUser.Email).Scan(&newUser.ID)
+	query := "INSERT INTO user_account (full_name, email, investor_profile) VALUES ($1, $2, $3) RETURNING id"
+	err := r.DB.QueryRow(ctx, query, userAttributes.FullName, userAttributes.Email, userAttributes.InvestorProfile).Scan(&userAttributes.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return newUser, nil
+	return userAttributes, nil
+}
+
+// GetUserByID is the resolver for the getUserById field.
+func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: GetUserByID - getUserById"))
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
 
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have
@@ -94,9 +65,10 @@ type mutationResolver struct{ *Resolver }
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
 /*
-	func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	return nil, nil
+	func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
 }
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
-type queryResolver struct{ *Resolver }
+func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+	panic(fmt.Errorf("not implemented: Todos - todos"))
+}
 */

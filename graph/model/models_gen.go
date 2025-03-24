@@ -2,283 +2,97 @@
 
 package model
 
-import (
-	"fmt"
-	"io"
-	"strconv"
-)
-
 type EngagementLevel struct {
-	Type    []*EngagementType `json:"type,omitempty"`
-	Details *string           `json:"details,omitempty"`
+	Type    []*string `json:"type,omitempty"`
+	Details *string   `json:"details,omitempty"`
 }
 
 type EngagementLevelInput struct {
-	Type    []*EngagementType `json:"type,omitempty"`
-	Details *string           `json:"details,omitempty"`
+	Type    []*string `json:"type,omitempty"`
+	Details *string   `json:"details,omitempty"`
 }
 
 type InvestmentRange struct {
-	FromUsd *float64 `json:"fromUsd,omitempty"`
-	ToUsd   *float64 `json:"toUsd,omitempty"`
+	FromUsd *int32 `json:"from_usd,omitempty"`
+	ToUsd   *int32 `json:"to_usd,omitempty"`
+}
+
+type InvestmentRangeAndFee struct {
+	InvestmentRange       *InvestmentRange `json:"investment_range,omitempty"`
+	AdvisoryFeeUsdPerHour *int32           `json:"advisory_fee_usd_per_hour,omitempty"`
+}
+
+type InvestmentRangeAndFeeInput struct {
+	InvestmentRange       *InvestmentRangeInput `json:"investment_range,omitempty"`
+	AdvisoryFeeUsdPerHour *int32                `json:"advisory_fee_usd_per_hour,omitempty"`
 }
 
 type InvestmentRangeInput struct {
-	FromUsd *float64 `json:"fromUsd,omitempty"`
-	ToUsd   *float64 `json:"toUsd,omitempty"`
+	FromUsd *int32 `json:"from_usd,omitempty"`
+	ToUsd   *int32 `json:"to_usd,omitempty"`
 }
 
-type InvestmentSizeAdvisoryFee struct {
-	InvestmentRange       *InvestmentRange `json:"investmentRange,omitempty"`
-	AdvisoryFeeUsdPerHour *float64         `json:"advisoryFeeUsdPerHour,omitempty"`
+type InvestorProfile struct {
+	RoleFocus                  *RoleFocus             `json:"role_focus,omitempty"`
+	IndustryExpertise          []*string              `json:"industry_expertise,omitempty"`
+	GeographicPreference       []*string              `json:"geographic_preference,omitempty"`
+	InvestmentAdvisoryStage    []*string              `json:"investment_advisory_stage,omitempty"`
+	InvestmentRangeAdvisoryFee *InvestmentRangeAndFee `json:"investment_range_advisory_fee,omitempty"`
+	DealStructurePreferences   []*string              `json:"deal_structure_preferences,omitempty"`
+	EngagementLevel            *EngagementLevel       `json:"engagement_level,omitempty"`
+	KeyStrengths               []*string              `json:"key_strengths,omitempty"`
+	NetworkAndValueAdd         *NetworkValueAdd       `json:"network_and_value_add,omitempty"`
+	SuccessMetrics             []*string              `json:"success_metrics,omitempty"`
 }
 
-type InvestmentSizeAdvisoryFeeInput struct {
-	InvestmentRange       *InvestmentRangeInput `json:"investmentRange,omitempty"`
-	AdvisoryFeeUsdPerHour *float64              `json:"advisoryFeeUsdPerHour,omitempty"`
+type InvestorProfileInput struct {
+	RoleFocus                  *RoleFocusInput             `json:"role_focus,omitempty"`
+	IndustryExpertise          []*string                   `json:"industry_expertise,omitempty"`
+	GeographicPreference       []*string                   `json:"geographic_preference,omitempty"`
+	InvestmentAdvisoryStage    []*string                   `json:"investment_advisory_stage,omitempty"`
+	InvestmentRangeAdvisoryFee *InvestmentRangeAndFeeInput `json:"investment_range_advisory_fee,omitempty"`
+	DealStructurePreferences   []*string                   `json:"deal_structure_preferences,omitempty"`
+	EngagementLevel            *EngagementLevelInput       `json:"engagement_level,omitempty"`
+	KeyStrengths               []*string                   `json:"key_strengths,omitempty"`
+	NetworkAndValueAdd         *NetworkValueAddInput       `json:"network_and_value_add,omitempty"`
+	SuccessMetrics             []*string                   `json:"success_metrics,omitempty"`
 }
 
 type Mutation struct {
 }
 
-type NetworkAndValue struct {
+type NetworkValueAdd struct {
 	Network           *string `json:"network,omitempty"`
-	AdditionalSupport *string `json:"additionalSupport,omitempty"`
+	AdditionalSupport *string `json:"additional_support,omitempty"`
 }
 
-type NetworkAndValueInput struct {
+type NetworkValueAddInput struct {
 	Network           *string `json:"network,omitempty"`
-	AdditionalSupport *string `json:"additionalSupport,omitempty"`
+	AdditionalSupport *string `json:"additional_support,omitempty"`
 }
 
 type NewUser struct {
-	FullName string            `json:"full_name"`
-	Email    string            `json:"email"`
-	Profile  *UserProfileInput `json:"profile"`
+	FullName        string                `json:"full_name"`
+	Email           string                `json:"email"`
+	InvestorProfile *InvestorProfileInput `json:"investor_profile,omitempty"`
 }
 
 type Query struct {
 }
 
 type RoleFocus struct {
-	Role       []*Role `json:"role,omitempty"`
-	FocusAreas *string `json:"focusAreas,omitempty"`
+	Role       []*string `json:"role,omitempty"`
+	FocusAreas []*string `json:"focus_areas,omitempty"`
 }
 
 type RoleFocusInput struct {
-	Role       []*Role `json:"role,omitempty"`
-	FocusAreas *string `json:"focusAreas,omitempty"`
-}
-
-type SuccessMetrics struct {
-	PrimaryMetrics    []*string `json:"primaryMetrics,omitempty"`
-	MeasurementMethod *string   `json:"measurementMethod,omitempty"`
-}
-
-type SuccessMetricsInput struct {
-	PrimaryMetrics    []*string `json:"primaryMetrics,omitempty"`
-	MeasurementMethod *string   `json:"measurementMethod,omitempty"`
+	Role       []*string `json:"role,omitempty"`
+	FocusAreas []*string `json:"focus_areas,omitempty"`
 }
 
 type User struct {
-	ID       string       `json:"id"`
-	FullName string       `json:"full_name"`
-	Email    string       `json:"email"`
-	Profile  *UserProfile `json:"profile,omitempty"`
-}
-
-type UserProfile struct {
-	RoleFocus                  *RoleFocus                 `json:"roleFocus,omitempty"`
-	IndustryExpertise          []*string                  `json:"industryExpertise,omitempty"`
-	GeographicPreference       []*string                  `json:"geographicPreference,omitempty"`
-	InvestmentAdvisoryStage    []*FocusArea               `json:"investmentAdvisoryStage,omitempty"`
-	InvestmentRangeAdvisoryFee *InvestmentSizeAdvisoryFee `json:"investmentRangeAdvisoryFee,omitempty"`
-	DealStructurePreferences   []*DealPreference          `json:"dealStructurePreferences,omitempty"`
-	EngagementLevel            *EngagementLevel           `json:"engagementLevel,omitempty"`
-	KeyStrengths               []*string                  `json:"keyStrengths,omitempty"`
-	NetworkAndValueAdd         *NetworkAndValue           `json:"networkAndValueAdd,omitempty"`
-	SuccessMetrics             *SuccessMetrics            `json:"successMetrics,omitempty"`
-}
-
-type UserProfileInput struct {
-	RoleFocus                  *RoleFocusInput                 `json:"roleFocus,omitempty"`
-	IndustryExpertise          []*string                       `json:"industryExpertise,omitempty"`
-	GeographicPreference       []*string                       `json:"geographicPreference,omitempty"`
-	InvestmentAdvisoryStage    []*FocusArea                    `json:"investmentAdvisoryStage,omitempty"`
-	InvestmentRangeAdvisoryFee *InvestmentSizeAdvisoryFeeInput `json:"investmentRangeAdvisoryFee,omitempty"`
-	DealStructurePreferences   []*DealPreference               `json:"dealStructurePreferences,omitempty"`
-	EngagementLevel            *EngagementLevelInput           `json:"engagementLevel,omitempty"`
-	KeyStrengths               []*string                       `json:"keyStrengths,omitempty"`
-	NetworkAndValueAdd         *NetworkAndValueInput           `json:"networkAndValueAdd,omitempty"`
-	SuccessMetrics             *SuccessMetricsInput            `json:"successMetrics,omitempty"`
-}
-
-type DealPreference string
-
-const (
-	DealPreferenceEquity           DealPreference = "EQUITY"
-	DealPreferenceConvertibleNotes DealPreference = "CONVERTIBLE_NOTES"
-	DealPreferenceCashInvestments  DealPreference = "CASH_INVESTMENTS"
-)
-
-var AllDealPreference = []DealPreference{
-	DealPreferenceEquity,
-	DealPreferenceConvertibleNotes,
-	DealPreferenceCashInvestments,
-}
-
-func (e DealPreference) IsValid() bool {
-	switch e {
-	case DealPreferenceEquity, DealPreferenceConvertibleNotes, DealPreferenceCashInvestments:
-		return true
-	}
-	return false
-}
-
-func (e DealPreference) String() string {
-	return string(e)
-}
-
-func (e *DealPreference) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = DealPreference(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid DealPreference", str)
-	}
-	return nil
-}
-
-func (e DealPreference) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type EngagementType string
-
-const (
-	EngagementTypeHandsOnOperationalSupport EngagementType = "HANDS_ON_OPERATIONAL_SUPPORT"
-	EngagementTypeStrategicOversight        EngagementType = "STRATEGIC_OVERSIGHT"
-)
-
-var AllEngagementType = []EngagementType{
-	EngagementTypeHandsOnOperationalSupport,
-	EngagementTypeStrategicOversight,
-}
-
-func (e EngagementType) IsValid() bool {
-	switch e {
-	case EngagementTypeHandsOnOperationalSupport, EngagementTypeStrategicOversight:
-		return true
-	}
-	return false
-}
-
-func (e EngagementType) String() string {
-	return string(e)
-}
-
-func (e *EngagementType) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = EngagementType(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid EngagementType", str)
-	}
-	return nil
-}
-
-func (e EngagementType) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type FocusArea string
-
-const (
-	FocusAreaSeed       FocusArea = "SEED"
-	FocusAreaEarlyStage FocusArea = "EARLY_STAGE"
-	FocusAreaGrowth     FocusArea = "GROWTH"
-	FocusAreaMature     FocusArea = "MATURE"
-)
-
-var AllFocusArea = []FocusArea{
-	FocusAreaSeed,
-	FocusAreaEarlyStage,
-	FocusAreaGrowth,
-	FocusAreaMature,
-}
-
-func (e FocusArea) IsValid() bool {
-	switch e {
-	case FocusAreaSeed, FocusAreaEarlyStage, FocusAreaGrowth, FocusAreaMature:
-		return true
-	}
-	return false
-}
-
-func (e FocusArea) String() string {
-	return string(e)
-}
-
-func (e *FocusArea) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = FocusArea(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid FocusArea", str)
-	}
-	return nil
-}
-
-func (e FocusArea) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type Role string
-
-const (
-	RoleInvestor Role = "INVESTOR"
-	RoleAdvisor  Role = "ADVISOR"
-)
-
-var AllRole = []Role{
-	RoleInvestor,
-	RoleAdvisor,
-}
-
-func (e Role) IsValid() bool {
-	switch e {
-	case RoleInvestor, RoleAdvisor:
-		return true
-	}
-	return false
-}
-
-func (e Role) String() string {
-	return string(e)
-}
-
-func (e *Role) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Role(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Role", str)
-	}
-	return nil
-}
-
-func (e Role) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	ID              string           `json:"id"`
+	FullName        string           `json:"full_name"`
+	Email           string           `json:"email"`
+	InvestorProfile *InvestorProfile `json:"investor_profile,omitempty"`
 }

@@ -11,8 +11,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/furre-dev/homelaan-gql/database"
-	"github.com/furre-dev/homelaan-gql/graph"
+	"github.com/furre-dev/homelaan-go-backend/database"
+	"github.com/furre-dev/homelaan-go-backend/graph"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 

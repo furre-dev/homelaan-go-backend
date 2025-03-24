@@ -1,4 +1,4 @@
-module github.com/furre-dev/homelaan-gql
+module github.com/furre-dev/homelaan-go-backend
 
 go 1.24.1
 

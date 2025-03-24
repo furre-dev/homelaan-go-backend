@@ -2,128 +2,98 @@
 #
 # https://gqlgen.com/getting-started/
 
-# go run github.com/99designs/gqlgen generate to generate
+input RoleFocusInput {
+  role: [String]
+  focus_areas: [String]
+}
+
+input InvestmentRangeInput {
+  from_usd: Int
+  to_usd: Int
+}
+
+input InvestmentRangeAndFeeInput {
+  investment_range: InvestmentRangeInput
+  advisory_fee_usd_per_hour: Int
+}
+
+input EngagementLevelInput {
+  type: [String]
+  details: String
+}
+
+input NetworkValueAddInput {
+  network: String
+  additional_support: String
+}
+
+input InvestorProfileInput {
+  role_focus: RoleFocusInput
+  industry_expertise: [String]
+  geographic_preference: [String]
+  investment_advisory_stage: [String]
+  investment_range_advisory_fee: InvestmentRangeAndFeeInput
+  deal_structure_preferences: [String]
+  engagement_level: EngagementLevelInput
+  key_strengths: [String]
+  network_and_value_add: NetworkValueAddInput
+  success_metrics: [String]
+}
+
+## TYPES
+
+type RoleFocus {
+  role: [String]
+  focus_areas: [String]
+}
+
+type InvestmentRange {
+  from_usd: Int
+  to_usd: Int
+}
+type InvestmentRangeAndFee {
+  investment_range: InvestmentRange
+  advisory_fee_usd_per_hour: Int
+}
+
+type EngagementLevel {
+  type: [String]
+  details: String
+}
+
+type NetworkValueAdd {
+  network: String
+  additional_support: String
+}
+
+type InvestorProfile {
+  role_focus: RoleFocus
+  industry_expertise: [String]
+  geographic_preference: [String]
+  investment_advisory_stage: [String]
+  investment_range_advisory_fee: InvestmentRangeAndFee
+  deal_structure_preferences: [String]
+  engagement_level: EngagementLevel
+  key_strengths: [String]
+  network_and_value_add: NetworkValueAdd
+  success_metrics: [String]
+}
 
 type User {
   id: ID!
   full_name: String!
   email: String!
-  profile: UserProfile
+  investor_profile: InvestorProfile
 }
 
 input NewUser {
   full_name: String!
   email: String!
-  profile: UserProfileInput!
+  investor_profile: InvestorProfileInput
 }
 
-enum Role {
-  INVESTOR
-  ADVISOR
-}
-
-enum FocusArea {
-  SEED
-  EARLY_STAGE
-  GROWTH
-  MATURE
-}
-
-enum DealPreference {
-  EQUITY
-  CONVERTIBLE_NOTES
-  CASH_INVESTMENTS
-}
-
-enum EngagementType {
-  HANDS_ON_OPERATIONAL_SUPPORT
-  STRATEGIC_OVERSIGHT
-}
-
-type RoleFocus {
-  role: [Role]
-  focusAreas: String
-}
-
-type InvestmentRange {
-  fromUsd: Float
-  toUsd: Float
-}
-
-type InvestmentSizeAdvisoryFee {
-  investmentRange: InvestmentRange
-  advisoryFeeUsdPerHour: Float
-}
-
-type EngagementLevel {
-  type: [EngagementType]
-  details: String
-}
-
-type NetworkAndValue {
-  network: String
-  additionalSupport: String
-}
-
-type SuccessMetrics {
-  primaryMetrics: [String]
-  measurementMethod: String
-}
-
-type UserProfile {
-  roleFocus: RoleFocus
-  industryExpertise: [String]
-  geographicPreference: [String]
-  investmentAdvisoryStage: [FocusArea]
-  investmentRangeAdvisoryFee: InvestmentSizeAdvisoryFee
-  dealStructurePreferences: [DealPreference]
-  engagementLevel: EngagementLevel
-  keyStrengths: [String]
-  networkAndValueAdd: NetworkAndValue
-  successMetrics: SuccessMetrics
-}
-
-input RoleFocusInput {
-  role: [Role]
-  focusAreas: String
-}
-
-input InvestmentRangeInput {
-  fromUsd: Float
-  toUsd: Float
-}
-
-input InvestmentSizeAdvisoryFeeInput {
-  investmentRange: InvestmentRangeInput
-  advisoryFeeUsdPerHour: Float
-}
-
-input EngagementLevelInput {
-  type: [EngagementType]
-  details: String
-}
-
-input NetworkAndValueInput {
-  network: String
-  additionalSupport: String
-}
-
-input SuccessMetricsInput {
-  primaryMetrics: [String]
-  measurementMethod: String
-}
-
-input UserProfileInput {
-  roleFocus: RoleFocusInput
-  industryExpertise: [String]
-  geographicPreference: [String]
-  investmentAdvisoryStage: [FocusArea]
-  investmentRangeAdvisoryFee: InvestmentSizeAdvisoryFeeInput
-  dealStructurePreferences: [DealPreference]
-  engagementLevel: EngagementLevelInput
-  keyStrengths: [String]
-  networkAndValueAdd: NetworkAndValueInput
-  successMetrics: SuccessMetricsInput
+type Query {
+  getUserById(id: ID!): User!
 }
 
 type Mutation {
