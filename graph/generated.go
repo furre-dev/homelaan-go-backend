@@ -93,6 +93,11 @@ type ComplexityRoot struct {
 		Role       func(childComplexity int) int
 	}
 
+	SuccessMetrics struct {
+		MeasurementMethod func(childComplexity int) int
+		PrimaryMetrics    func(childComplexity int) int
+	}
+
 	User struct {
 		Email           func(childComplexity int) int
 		FullName        func(childComplexity int) int
@@ -291,6 +296,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RoleFocus.Role(childComplexity), true
 
+	case "SuccessMetrics.measurement_method":
+		if e.complexity.SuccessMetrics.MeasurementMethod == nil {
+			break
+		}
+
+		return e.complexity.SuccessMetrics.MeasurementMethod(childComplexity), true
+
+	case "SuccessMetrics.primary_metrics":
+		if e.complexity.SuccessMetrics.PrimaryMetrics == nil {
+			break
+		}
+
+		return e.complexity.SuccessMetrics.PrimaryMetrics(childComplexity), true
+
 	case "User.email":
 		if e.complexity.User.Email == nil {
 			break
@@ -334,6 +353,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputNetworkValueAddInput,
 		ec.unmarshalInputNewUser,
 		ec.unmarshalInputRoleFocusInput,
+		ec.unmarshalInputSuccessMetricsInput,
 	)
 	first := true
 
@@ -1287,9 +1307,9 @@ func (ec *executionContext) _InvestorProfile_success_metrics(ctx context.Context
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*string)
+	res := resTmp.(*model.SuccessMetrics)
 	fc.Result = res
-	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+	return ec.marshalOSuccessMetrics2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐSuccessMetrics(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_InvestorProfile_success_metrics(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1299,7 +1319,13 @@ func (ec *executionContext) fieldContext_InvestorProfile_success_metrics(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "primary_metrics":
+				return ec.fieldContext_SuccessMetrics_primary_metrics(ctx, field)
+			case "measurement_method":
+				return ec.fieldContext_SuccessMetrics_measurement_method(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SuccessMetrics", field.Name)
 		},
 	}
 	return fc, nil
@@ -1720,6 +1746,88 @@ func (ec *executionContext) _RoleFocus_focus_areas(ctx context.Context, field gr
 func (ec *executionContext) fieldContext_RoleFocus_focus_areas(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "RoleFocus",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SuccessMetrics_primary_metrics(ctx context.Context, field graphql.CollectedField, obj *model.SuccessMetrics) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SuccessMetrics_primary_metrics(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrimaryMetrics, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SuccessMetrics_primary_metrics(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SuccessMetrics",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SuccessMetrics_measurement_method(ctx context.Context, field graphql.CollectedField, obj *model.SuccessMetrics) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SuccessMetrics_measurement_method(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MeasurementMethod, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SuccessMetrics_measurement_method(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SuccessMetrics",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -4057,7 +4165,7 @@ func (ec *executionContext) unmarshalInputInvestorProfileInput(ctx context.Conte
 			it.NetworkAndValueAdd = data
 		case "success_metrics":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("success_metrics"))
-			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			data, err := ec.unmarshalOSuccessMetricsInput2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐSuccessMetricsInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4171,6 +4279,40 @@ func (ec *executionContext) unmarshalInputRoleFocusInput(ctx context.Context, ob
 				return it, err
 			}
 			it.FocusAreas = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputSuccessMetricsInput(ctx context.Context, obj any) (model.SuccessMetricsInput, error) {
+	var it model.SuccessMetricsInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"primary_metrics", "measurement_method"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "primary_metrics":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primary_metrics"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryMetrics = data
+		case "measurement_method":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("measurement_method"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MeasurementMethod = data
 		}
 	}
 
@@ -4527,6 +4669,44 @@ func (ec *executionContext) _RoleFocus(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._RoleFocus_role(ctx, field, obj)
 		case "focus_areas":
 			out.Values[i] = ec._RoleFocus_focus_areas(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var successMetricsImplementors = []string{"SuccessMetrics"}
+
+func (ec *executionContext) _SuccessMetrics(ctx context.Context, sel ast.SelectionSet, obj *model.SuccessMetrics) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, successMetricsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SuccessMetrics")
+		case "primary_metrics":
+			out.Values[i] = ec._SuccessMetrics_primary_metrics(ctx, field, obj)
+		case "measurement_method":
+			out.Values[i] = ec._SuccessMetrics_measurement_method(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5427,6 +5607,21 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOSuccessMetrics2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐSuccessMetrics(ctx context.Context, sel ast.SelectionSet, v *model.SuccessMetrics) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SuccessMetrics(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOSuccessMetricsInput2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐSuccessMetricsInput(ctx context.Context, v any) (*model.SuccessMetricsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSuccessMetricsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/furre-dev/homelaan-go-backend/graph/model"
 )
@@ -26,7 +25,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		EngagementLevel:          (*model.EngagementLevel)(input.InvestorProfile.EngagementLevel),
 		KeyStrengths:             input.InvestorProfile.KeyStrengths,
 		NetworkAndValueAdd:       (*model.NetworkValueAdd)(input.InvestorProfile.NetworkAndValueAdd),
-		SuccessMetrics:           input.InvestorProfile.SuccessMetrics,
+		SuccessMetrics:           (*model.SuccessMetrics)(input.InvestorProfile.SuccessMetrics),
 	}
 
 	userAttributes := &model.User{
@@ -46,7 +45,18 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 
 // GetUserByID is the resolver for the getUserById field.
 func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUserByID - getUserById"))
+	query := "SELECT * FROM user_account WHERE id = $1"
+
+	row := r.DB.QueryRow(ctx, query, id)
+
+	var user model.User
+
+	rowError := row.Scan(&user.ID, &user.FullName, &user.Email, &user.InvestorProfile)
+	if rowError != nil {
+		return nil, rowError
+	}
+
+	return &user, nil
 }
 
 // Mutation returns MutationResolver implementation.
@@ -57,18 +67,3 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-/*
-	func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
-}
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
-}
-*/

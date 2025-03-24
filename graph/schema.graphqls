@@ -2,6 +2,11 @@
 #
 # https://gqlgen.com/getting-started/
 
+input SuccessMetricsInput {
+  primary_metrics: [String]
+  measurement_method: [String]
+}
+
 input RoleFocusInput {
   role: [String]
   focus_areas: [String]
@@ -37,7 +42,7 @@ input InvestorProfileInput {
   engagement_level: EngagementLevelInput
   key_strengths: [String]
   network_and_value_add: NetworkValueAddInput
-  success_metrics: [String]
+  success_metrics: SuccessMetricsInput
 }
 
 ## TYPES
@@ -66,6 +71,11 @@ type NetworkValueAdd {
   additional_support: String
 }
 
+type SuccessMetrics {
+  primary_metrics: [String]
+  measurement_method: [String]
+}
+
 type InvestorProfile {
   role_focus: RoleFocus
   industry_expertise: [String]
@@ -76,7 +86,7 @@ type InvestorProfile {
   engagement_level: EngagementLevel
   key_strengths: [String]
   network_and_value_add: NetworkValueAdd
-  success_metrics: [String]
+  success_metrics: SuccessMetrics
 }
 
 type User {

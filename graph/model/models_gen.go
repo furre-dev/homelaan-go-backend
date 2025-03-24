@@ -42,7 +42,7 @@ type InvestorProfile struct {
 	EngagementLevel            *EngagementLevel       `json:"engagement_level,omitempty"`
 	KeyStrengths               []*string              `json:"key_strengths,omitempty"`
 	NetworkAndValueAdd         *NetworkValueAdd       `json:"network_and_value_add,omitempty"`
-	SuccessMetrics             []*string              `json:"success_metrics,omitempty"`
+	SuccessMetrics             *SuccessMetrics        `json:"success_metrics,omitempty"`
 }
 
 type InvestorProfileInput struct {
@@ -55,7 +55,7 @@ type InvestorProfileInput struct {
 	EngagementLevel            *EngagementLevelInput       `json:"engagement_level,omitempty"`
 	KeyStrengths               []*string                   `json:"key_strengths,omitempty"`
 	NetworkAndValueAdd         *NetworkValueAddInput       `json:"network_and_value_add,omitempty"`
-	SuccessMetrics             []*string                   `json:"success_metrics,omitempty"`
+	SuccessMetrics             *SuccessMetricsInput        `json:"success_metrics,omitempty"`
 }
 
 type Mutation struct {
@@ -88,6 +88,16 @@ type RoleFocus struct {
 type RoleFocusInput struct {
 	Role       []*string `json:"role,omitempty"`
 	FocusAreas []*string `json:"focus_areas,omitempty"`
+}
+
+type SuccessMetrics struct {
+	PrimaryMetrics    []*string `json:"primary_metrics,omitempty"`
+	MeasurementMethod []*string `json:"measurement_method,omitempty"`
+}
+
+type SuccessMetricsInput struct {
+	PrimaryMetrics    []*string `json:"primary_metrics,omitempty"`
+	MeasurementMethod []*string `json:"measurement_method,omitempty"`
 }
 
 type User struct {
