@@ -72,6 +72,7 @@ type NetworkValueAddInput struct {
 }
 
 type NewUser struct {
+	ID              string                `json:"id"`
 	FullName        string                `json:"full_name"`
 	Email           string                `json:"email"`
 	InvestorProfile *InvestorProfileInput `json:"investor_profile,omitempty"`

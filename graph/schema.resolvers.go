@@ -29,13 +29,14 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	}
 
 	userAttributes := &model.User{
+		ID:              input.ID,
 		FullName:        input.FullName,
 		Email:           input.Email,
 		InvestorProfile: userProfile,
 	}
 
-	query := "INSERT INTO user_account (full_name, email, investor_profile) VALUES ($1, $2, $3) RETURNING id"
-	err := r.DB.QueryRow(ctx, query, userAttributes.FullName, userAttributes.Email, userAttributes.InvestorProfile).Scan(&userAttributes.ID)
+	query := "INSERT INTO user_account (id, full_name, email, investor_profile) VALUES ($1, $2, $3, $4) RETURNING id"
+	err := r.DB.QueryRow(ctx, query, userAttributes.ID, userAttributes.FullName, userAttributes.Email, userAttributes.InvestorProfile).Scan(&userAttributes.ID)
 	if err != nil {
 		return nil, err
 	}

@@ -97,6 +97,7 @@ type User {
 }
 
 input NewUser {
+  id: ID!
   full_name: String!
   email: String!
   investor_profile: InvestorProfileInput

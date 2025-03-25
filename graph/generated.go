@@ -4217,13 +4217,20 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj any) 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"full_name", "email", "investor_profile"}
+	fieldsInOrder := [...]string{"id", "full_name", "email", "investor_profile"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
 		case "full_name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("full_name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
