@@ -57,13 +57,13 @@ type InvestmentRangeInput struct {
 }
 
 type InvestorProfile struct {
-	GeoInfo                   *PersonalGeographicProfile `json:"geo_info" jsonschema:"non-nullable"`
-	ProfessionalBackground    *ProfessionalBackground    `json:"professional_background" jsonschema:"non-nullable"`
-	NetworkMarketAccess       *NetworkMarketAccess       `json:"network_market_access" jsonschema:"non-nullable"`
-	EngagementPreferences     *EngagementPreferences     `json:"engagement_preferences" jsonschema:"non-nullable"`
-	InvestmentAppetite        *InvestmentAppetite        `json:"investment_appetite" jsonschema:"non-nullable"`
-	AvailabilityAndCommitment *AvailabilityCommitment    `json:"availability_and_commitment" jsonschema:"non-nullable"`
-	SpousalInvolvement        *SpousalInvolvement        `json:"spousal_involvement" jsonschema:"non-nullable"`
+	GeoInfo                   *PersonalGeographicProfile `json:"geo_info"`
+	ProfessionalBackground    *ProfessionalBackground    `json:"professional_background"`
+	NetworkMarketAccess       *NetworkMarketAccess       `json:"network_market_access"`
+	EngagementPreferences     *EngagementPreferences     `json:"engagement_preferences"`
+	InvestmentAppetite        *InvestmentAppetite        `json:"investment_appetite"`
+	AvailabilityAndCommitment *AvailabilityCommitment    `json:"availability_and_commitment"`
+	SpousalInvolvement        *SpousalInvolvement        `json:"spousal_involvement"`
 	AdditionalInfo            *string                    `json:"additional_info"`
 }
 

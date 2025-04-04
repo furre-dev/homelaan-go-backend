@@ -4,6 +4,7 @@ go 1.24.1
 
 require (
 	github.com/99designs/gqlgen v0.17.68
+	github.com/furre-dev/jsonschema-nullable v0.14.6
 	github.com/go-chi/chi v1.5.5
 	github.com/jackc/pgx/v5 v5.7.3
 	github.com/openai/openai-go v0.1.0-beta.3
@@ -16,7 +17,6 @@ require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
-	github.com/furre-dev/jsonschema-nullable v0.14.6 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
@@ -25,7 +25,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/orsinium-labs/valdo v1.2.1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sosodev/duration v1.3.1 // indirect

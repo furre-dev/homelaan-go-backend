@@ -22,10 +22,6 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgryski/trifles v0.0.0-20230903005119-f50d829f2e54 h1:SG7nF6SRlWhcT7cNTs5R6Hk4V2lcmLz2NsG2VnInyNo=
 github.com/dgryski/trifles v0.0.0-20230903005119-f50d829f2e54/go.mod h1:if7Fbed8SFyPtHLHbg49SI7NAdJiC5WIA09pe59rfAA=
-github.com/furre-dev/jsonschema-nullable v0.14.1 h1:hk2psVpRxw6NANMb/TdY6UrFFmuJ/VQvnBHqZGIrONM=
-github.com/furre-dev/jsonschema-nullable v0.14.1/go.mod h1:8iFVh7EiFZ+rnI4M9Qw+08oE2bnDLCyeJm5eTBccgO8=
-github.com/furre-dev/jsonschema-nullable v0.14.5 h1:r2NH3HXwrkW7kJWH5tOumO29uobh45vcWDrQ9OfGBgA=
-github.com/furre-dev/jsonschema-nullable v0.14.5/go.mod h1:8iFVh7EiFZ+rnI4M9Qw+08oE2bnDLCyeJm5eTBccgO8=
 github.com/furre-dev/jsonschema-nullable v0.14.6 h1:1Lf6NrhNRAuF3CR674ZkriMUyfnBP2eVYuJRixGbSAA=
 github.com/furre-dev/jsonschema-nullable v0.14.6/go.mod h1:8iFVh7EiFZ+rnI4M9Qw+08oE2bnDLCyeJm5eTBccgO8=
 github.com/go-chi/chi v1.5.5 h1:vOB/HbEMt9QqBqErz07QehcOKHaWFtuj87tTDVz2qXE=
@@ -40,8 +36,6 @@ github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWm
 github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/hashicorp/golang-lru/v2 v2.0.7 h1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs4luLUK2k=
 github.com/hashicorp/golang-lru/v2 v2.0.7/go.mod h1:QeFd9opnmA6QUJc5vARoKUSoFhyfM2/ZepoAG6RGpeM=
-github.com/invopop/jsonschema v0.13.0 h1:KvpoAJWEjR3uD9Kbm2HWJmqsEaHt8lBUpd0qHcIi21E=
-github.com/invopop/jsonschema v0.13.0/go.mod h1:ffZ5Km5SWWRAIN6wbDXItl95euhFz2uON45H2qjYt+0=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
 github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
 github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 h1:iCEnooe7UlwOQYpKFhBabPMi4aNAfoODPEFNiAnClxo=
@@ -59,8 +53,6 @@ github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/openai/openai-go v0.1.0-beta.3 h1:bbnQaLsLvqabuhNBbTLjz//Br59FHxJderqHd/4R4iM=
 github.com/openai/openai-go v0.1.0-beta.3/go.mod h1:g461MYGXEXBVdV5SaR/5tNzNbSfwTBBefwc+LlDCK0Y=
-github.com/orsinium-labs/valdo v1.2.1 h1:WCeVeWrsjnPuCzfsFndEeZGWIdIxy08lZ81JlNnZp2g=
-github.com/orsinium-labs/valdo v1.2.1/go.mod h1:owilBvWadbHCanH8iVE0SlYydceE9s7SvPIof24RXZo=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=

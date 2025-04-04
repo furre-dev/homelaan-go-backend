@@ -2757,11 +2757,14 @@ func (ec *executionContext) _Query_GetQuestion(ctx context.Context, field graphq
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Question)
 	fc.Result = res
-	return ec.marshalOQuestion2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐQuestion(ctx, field.Selections, res)
+	return ec.marshalNQuestion2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐQuestion(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_GetQuestion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6450,13 +6453,16 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		case "GetQuestion":
 			field := field
 
-			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
 				defer func() {
 					if r := recover(); r != nil {
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
 				res = ec._Query_GetQuestion(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
 				return res
 			}
 
@@ -7076,6 +7082,20 @@ func (ec *executionContext) marshalNProfessionalBackground2ᚖgithubᚗcomᚋfur
 		return graphql.Null
 	}
 	return ec._ProfessionalBackground(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNQuestion2githubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐQuestion(ctx context.Context, sel ast.SelectionSet, v model.Question) graphql.Marshaler {
+	return ec._Question(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNQuestion2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐQuestion(ctx context.Context, sel ast.SelectionSet, v *model.Question) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Question(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNQuestionInput2ᚕᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐQuestionInputᚄ(ctx context.Context, v any) ([]*model.QuestionInput, error) {
@@ -7837,13 +7857,6 @@ func (ec *executionContext) marshalOProjectDurationPreference2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) marshalOQuestion2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐQuestion(ctx context.Context, sel ast.SelectionSet, v *model.Question) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Question(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOResidencyStatus2ᚖgithubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐResidencyStatus(ctx context.Context, v any) (*model.ResidencyStatus, error) {
