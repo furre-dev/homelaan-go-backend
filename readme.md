@@ -1,0 +1,3 @@
+## IMPORTANT
+
+### ALWAYS ADD 'jsonschema:"non-nullable"' ON TYPES THAT SHOULD NEVER BE ABLE TO BE NULL.

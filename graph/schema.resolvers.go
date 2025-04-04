@@ -6,42 +6,43 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/furre-dev/homelaan-go-backend/graph/model"
+	"github.com/furre-dev/homelaan-go-backend/utils"
+	"github.com/furre-dev/homelaan-go-backend/utils/interview"
 )
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	userProfile := &model.InvestorProfile{
-		RoleFocus:               (*model.RoleFocus)(input.InvestorProfile.RoleFocus),
-		IndustryExpertise:       input.InvestorProfile.IndustryExpertise,
-		GeographicPreference:    input.InvestorProfile.GeographicPreference,
-		InvestmentAdvisoryStage: input.InvestorProfile.InvestmentAdvisoryStage,
-		InvestmentRangeAdvisoryFee: &model.InvestmentRangeAndFee{
-			InvestmentRange:       (*model.InvestmentRange)(input.InvestorProfile.InvestmentRangeAdvisoryFee.InvestmentRange),
-			AdvisoryFeeUsdPerHour: input.InvestorProfile.InvestmentRangeAdvisoryFee.AdvisoryFeeUsdPerHour,
-		},
-		DealStructurePreferences: input.InvestorProfile.DealStructurePreferences,
-		EngagementLevel:          (*model.EngagementLevel)(input.InvestorProfile.EngagementLevel),
-		KeyStrengths:             input.InvestorProfile.KeyStrengths,
-		NetworkAndValueAdd:       (*model.NetworkValueAdd)(input.InvestorProfile.NetworkAndValueAdd),
-		SuccessMetrics:           (*model.SuccessMetrics)(input.InvestorProfile.SuccessMetrics),
-	}
+func (r *mutationResolver) CreateUser(ctx context.Context, userInput *model.UserInput) (*model.User, error) {
+	userProfile := utils.MapProfileInfoToUser(userInput.InvestorProfile)
 
 	userAttributes := &model.User{
-		ID:              input.ID,
-		FullName:        input.FullName,
-		Email:           input.Email,
+		ID:              userInput.ID,
+		FirstName:       userInput.FirstName,
+		LastName:        userInput.LastName,
+		Email:           userInput.Email,
 		InvestorProfile: userProfile,
 	}
 
-	query := "INSERT INTO user_account (id, full_name, email, investor_profile) VALUES ($1, $2, $3, $4) RETURNING id"
-	err := r.DB.QueryRow(ctx, query, userAttributes.ID, userAttributes.FullName, userAttributes.Email, userAttributes.InvestorProfile).Scan(&userAttributes.ID)
+	query := "INSERT INTO user_account (id, first_name, last_name, email, investor_profile) VALUES ($1, $2, $3, $4 $5) RETURNING id"
+	err := r.DB.QueryRow(ctx, query, userAttributes.ID, userAttributes.FirstName, userAttributes.LastName, userAttributes.Email, userAttributes.InvestorProfile).Scan(&userAttributes.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	return userAttributes, nil
+}
+
+// GenerateProfile is the resolver for the GenerateProfile field.
+func (r *mutationResolver) GenerateProfile(ctx context.Context, answers []*model.QuestionInput) (*model.InvestorProfile, error) {
+	generatedProfile, err := utils.GenerateUserProfile(answers)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return generatedProfile, nil
 }
 
 // GetUserByID is the resolver for the getUserById field.
@@ -52,12 +53,48 @@ func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*model.User
 
 	var user model.User
 
-	rowError := row.Scan(&user.ID, &user.FullName, &user.Email, &user.InvestorProfile)
+	rowError := row.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.InvestorProfile)
 	if rowError != nil {
 		return nil, rowError
 	}
 
 	return &user, nil
+}
+
+// GetQuestion is the resolver for the GetQuestion field.
+func (r *queryResolver) GetQuestion(ctx context.Context, index *int32) (*model.Question, error) {
+	// if there is no index provided, or if the index is 0, return the first question.
+	if (index == nil) || (*index == 0) {
+		question := interview.Questions[0]
+
+		isLast := &question.IsLastQuestion
+
+		return &model.Question{
+			QuestionTitle:  question.QuestionTitle,
+			ProfileField:   question.ProfileField,
+			IsLastQuestion: isLast,
+		}, nil
+	}
+
+	// if the index is provided, return the next question.
+	nextMessageIndex := *index + 1
+
+	questionsLength := int32(len(interview.Questions))
+
+	if nextMessageIndex >= questionsLength {
+		// Return an error if the nextMessage index is out of bounds
+		return nil, fmt.Errorf("question with index %d not found, the largest index possible is %d", nextMessageIndex, (questionsLength - 1))
+	}
+
+	question := interview.Questions[nextMessageIndex]
+
+	isLast := &question.IsLastQuestion
+
+	return &model.Question{
+		QuestionTitle:  question.QuestionTitle,
+		ProfileField:   question.ProfileField,
+		IsLastQuestion: isLast,
+	}, nil
 }
 
 // Mutation returns MutationResolver implementation.

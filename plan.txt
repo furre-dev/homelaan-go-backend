@@ -1,0 +1,3 @@
+Profiling of investor setup profile
+Same on the company side
+Once we have that we want to create algorithms for matching

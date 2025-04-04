@@ -1,40 +1,36 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-type User {
+input UserInput {
   id: ID!
   first_name: String!
   last_name: String!
   email: String!
-  investor_profile: InvestorProfile
+  investor_profile: InvestorProfileInput
 }
 
-type InvestorProfile {
-  geo_info: PersonalGeographicProfile!
-  professional_background: ProfessionalBackground!
-  network_market_access: NetworkMarketAccess!
-  engagement_preferences: EngagementPreferences!
-  investment_appetite: InvestmentAppetite!
-  availability_and_commitment: AvailabilityCommitment!
-  spousal_involvement: SpousalInvolvement!
+input InvestorProfileInput {
+  geo_info: PersonalGeographicProfileInput
+  professional_background: ProfessionalBackgroundInput
+  network_market_access: NetworkMarketAccessInput
+  engagement_preferences: EngagementPreferencesInput
+  investment_appetite: InvestmentAppetiteInput
+  availability_and_commitment: AvailabilityCommitmentInput
+  spousal_involvement: SpousalInvolvementInput
   additional_info: String
 }
 
-type Location {
+input LocationInput{
   city: String
   country: String
 }
 
-type PersonalGeographicProfile {
-  location: Location
+input PersonalGeographicProfileInput {
+  location: LocationInput
   years_abroad: Int
   will_stay_long_term_in_current_location: Boolean
   has_family_abroad: Boolean
   residency_status: ResidencyStatus
 }
 
-type ProfessionalBackground {
+input ProfessionalBackgroundInput {
   current_role: String
   organization: String
   industry: String
@@ -44,43 +40,33 @@ type ProfessionalBackground {
   decision_making_scope: String
 }
 
-type NetworkMarketAccess {
+input NetworkMarketAccessInput {
   industries_with_strong_network: [String]
   professional_contacts: ProfessionalContacts
   local_business_diaspora_groups: [String]
 }
 
-type EngagementPreferences {
+input EngagementPreferencesInput {
   business_opportunities: [BusinessOpportunities]
   sectors_of_interest: [String]
   opportunity_locations: [OpportunityLocations]
 }
 
-type InvestmentAppetite {
+input InvestmentAppetiteInput {
   active_investor_in_startups_or_small_mid_businesses: Boolean
-  investment_range: InvestmentRange
+  investment_range: InvestmentRangeInput
   angel_group_membership: Boolean
   involvement_type: [InvolvementType]
 }
 
-type AvailabilityCommitment {
+input AvailabilityCommitmentInput {
   monthly_commitment_hours: Int
   project_duration_preference: [ProjectDurationPreference]
   willingness_to_travel: Boolean
 }
 
-type SpousalInvolvement {
+input SpousalInvolvementInput {
   spouse_interested: Boolean
   spouse_professional_background: String
   spouse_expertise_areas: [String]
-}
-
-type Query {
-  GetUserByID(id: ID!): User!
-  GetQuestion(index: Int): Question
-}
-
-type Mutation {
-  CreateUser(user_input: UserInput): User!
-  GenerateProfile(answers: [QuestionInput!]!) : InvestorProfile!
 }

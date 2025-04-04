@@ -1,0 +1,11 @@
+type Question {
+  question_title: String!
+  profile_field: String!
+  is_last_question: Boolean
+}
+
+input QuestionInput {
+  question_title: String!
+  profile_field: String!
+  user_input_answer: String!
+}

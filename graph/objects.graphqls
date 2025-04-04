@@ -1,0 +1,9 @@
+type InvestmentRange {
+  from_usd: Int
+  to_usd: Int
+}
+
+input InvestmentRangeInput {
+  from_usd: Int
+  to_usd: Int
+}
