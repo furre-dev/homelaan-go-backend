@@ -1,7 +1,8 @@
 type Question {
   question_title: String!
   profile_field: String!
-  is_last_question: Boolean
+  is_last_question: Boolean!
+  question_index: Int!
 }
 
 input QuestionInput {

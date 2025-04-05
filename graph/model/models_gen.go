@@ -145,7 +145,8 @@ type Query struct {
 type Question struct {
 	QuestionTitle  string `json:"question_title"`
 	ProfileField   string `json:"profile_field"`
-	IsLastQuestion *bool  `json:"is_last_question"`
+	IsLastQuestion bool   `json:"is_last_question"`
+	QuestionIndex  int32  `json:"question_index"`
 }
 
 type QuestionInput struct {

@@ -1,15 +1,12 @@
 package interview
 
-type Question struct {
-	QuestionTitle  string `json:"question_title"`
-	ProfileField   string `json:"profile_field"`
-	IsLastQuestion bool   `json:"is_last_question"`
-}
+import "github.com/furre-dev/homelaan-go-backend/graph/model"
 
-var Questions = []Question{
+var Questions = []model.Question{
 	{
 		QuestionTitle: "Where are you currently living (city and country)?",
 		ProfileField:  "geo_info.location",
+		QuestionIndex: 0,
 	},
 	{
 		QuestionTitle: "How long have you lived abroad?",
@@ -68,7 +65,7 @@ var Questions = []Question{
 										Investment in startups
 										Investment in small/mid-sized businesses (SMBs)
 										Mentoring entrepreneurs
-										Operational involvement in ventures (interim leadership, turnaround, etc.)
+										Operational involvement in ventures (interim leadership, turnaround, model
 										Co-founding new ventures
 	`,
 		ProfileField: "engagement_preferences.business_opportunities",
@@ -114,8 +111,7 @@ var Questions = []Question{
 		ProfileField:  "spousal_involvement.spouse_interested",
 	},
 	{
-		QuestionTitle:  "If yes, what is their professional background and area of expertise?",
-		ProfileField:   "[spousal_involvement.spouse_professional_background, spousal_involvement.spouse_expertise_areas]",
-		IsLastQuestion: true,
+		QuestionTitle: "If yes, what is their professional background and area of expertise?",
+		ProfileField:  "[spousal_involvement.spouse_professional_background, spousal_involvement.spouse_expertise_areas]",
 	},
 }

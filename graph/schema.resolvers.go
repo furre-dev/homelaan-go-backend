@@ -67,33 +67,29 @@ func (r *queryResolver) GetQuestion(ctx context.Context, index *int32) (*model.Q
 	if (index == nil) || (*index == 0) {
 		question := interview.Questions[0]
 
-		isLast := &question.IsLastQuestion
-
 		return &model.Question{
 			QuestionTitle:  question.QuestionTitle,
 			ProfileField:   question.ProfileField,
-			IsLastQuestion: isLast,
+			IsLastQuestion: false,
+			QuestionIndex:  0,
 		}, nil
 	}
 
-	// if the index is provided, return the next question.
-	nextMessageIndex := *index + 1
-
 	questionsLength := int32(len(interview.Questions))
+	questionIsLast := *index == int32(questionsLength-1)
 
-	if nextMessageIndex >= questionsLength {
+	if *index >= questionsLength {
 		// Return an error if the nextMessage index is out of bounds
-		return nil, fmt.Errorf("question with index %d not found, the largest index possible is %d", nextMessageIndex, (questionsLength - 1))
+		return nil, fmt.Errorf("question with index %d not found, the largest index possible is %d", *index, (questionsLength - 1))
 	}
 
-	question := interview.Questions[nextMessageIndex]
-
-	isLast := &question.IsLastQuestion
+	question := interview.Questions[*index]
 
 	return &model.Question{
 		QuestionTitle:  question.QuestionTitle,
 		ProfileField:   question.ProfileField,
-		IsLastQuestion: isLast,
+		IsLastQuestion: questionIsLast,
+		QuestionIndex:  *index,
 	}, nil
 }
 
