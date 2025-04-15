@@ -168,19 +168,24 @@ type SpousalInvolvementInput struct {
 }
 
 type User struct {
-	ID              string           `json:"id"`
-	FirstName       string           `json:"first_name"`
-	LastName        string           `json:"last_name"`
-	Email           string           `json:"email"`
-	InvestorProfile *InvestorProfile `json:"investor_profile"`
+	ID        string    `json:"id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Email     string    `json:"email"`
+	UserType  *UserType `json:"user_type"`
 }
 
 type UserInput struct {
-	ID              string                `json:"id"`
-	FirstName       string                `json:"first_name"`
-	LastName        string                `json:"last_name"`
-	Email           string                `json:"email"`
-	InvestorProfile *InvestorProfileInput `json:"investor_profile"`
+	ID        string    `json:"id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Email     string    `json:"email"`
+	UserType  *UserType `json:"user_type"`
+}
+
+type UserTypeInput struct {
+	UserType UserType `json:"user_type"`
+	ID       string   `json:"id"`
 }
 
 type BusinessOpportunities string
@@ -480,5 +485,46 @@ func (e *ResidencyStatus) UnmarshalGQL(v any) error {
 }
 
 func (e ResidencyStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type UserType string
+
+const (
+	UserTypeFounder  UserType = "FOUNDER"
+	UserTypeInvestor UserType = "INVESTOR"
+)
+
+var AllUserType = []UserType{
+	UserTypeFounder,
+	UserTypeInvestor,
+}
+
+func (e UserType) IsValid() bool {
+	switch e {
+	case UserTypeFounder, UserTypeInvestor:
+		return true
+	}
+	return false
+}
+
+func (e UserType) String() string {
+	return string(e)
+}
+
+func (e *UserType) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserType", str)
+	}
+	return nil
+}
+
+func (e UserType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

@@ -1,3 +1,8 @@
+enum UserType {
+  FOUNDER,
+  INVESTOR
+}
+
 enum ResidencyStatus {
   CITIZEN
   PERMANENT_RESIDENT

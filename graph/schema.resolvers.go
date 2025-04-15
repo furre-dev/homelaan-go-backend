@@ -9,24 +9,63 @@ import (
 	"fmt"
 
 	"github.com/furre-dev/homelaan-go-backend/graph/model"
+	"github.com/furre-dev/homelaan-go-backend/internal"
 	"github.com/furre-dev/homelaan-go-backend/utils"
 	"github.com/furre-dev/homelaan-go-backend/utils/interview"
 )
 
-// CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, userInput *model.UserInput) (*model.User, error) {
-	userProfile := utils.MapProfileInfoToUser(userInput.InvestorProfile)
+// AssignUserType is the resolver for the AssignUserType field.
+func (r *mutationResolver) AssignUserType(ctx context.Context, userType model.UserTypeInput) (*model.User, error) {
+	userID, ok := internal.GetUserID(ctx)
 
-	userAttributes := &model.User{
-		ID:              userInput.ID,
-		FirstName:       userInput.FirstName,
-		LastName:        userInput.LastName,
-		Email:           userInput.Email,
-		InvestorProfile: userProfile,
+	if !ok || userID == "" {
+		return nil, fmt.Errorf("unauthenticated")
 	}
 
-	query := "INSERT INTO user_account (id, first_name, last_name, email, investor_profile) VALUES ($1, $2, $3, $4 $5) RETURNING id"
-	err := r.DB.QueryRow(ctx, query, userAttributes.ID, userAttributes.FirstName, userAttributes.LastName, userAttributes.Email, userAttributes.InvestorProfile).Scan(&userAttributes.ID)
+	print(userID)
+
+	query := "UPDATE users SET user_type = $1 WHERE id = $2 RETURNING id, first_name, last_name, email, user_type"
+
+	// Assuming userType.UserID contains the ID of the user to update.
+	// Also assuming that userType.Type contains the new user type to assign.
+	var updatedUser model.User
+	err := r.DB.QueryRow(ctx, query, userType.UserType, userType.ID).Scan(
+		&updatedUser.ID,
+		&updatedUser.FirstName,
+		&updatedUser.LastName,
+		&updatedUser.Email,
+		&updatedUser.UserType,
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("error updating user type: %w", err)
+	}
+
+	return &updatedUser, nil
+}
+
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, userInput *model.UserInput) (*model.User, error) {
+	/* var userProfile *model.InvestorProfile
+	if userInput.InvestorProfile != nil {
+		userProfile = utils.MapProfileInfoToUser(userInput.InvestorProfile)
+	} */
+
+	userAttributes := &model.User{
+		ID:        userInput.ID,
+		FirstName: userInput.FirstName,
+		LastName:  userInput.LastName,
+		Email:     userInput.Email,
+		UserType:  userInput.UserType,
+	}
+
+	query := "INSERT INTO users (id, first_name, last_name, email, user_type) VALUES ($1, $2, $3, $4, $5) RETURNING id"
+	err := r.DB.QueryRow(ctx, query,
+		userAttributes.ID,
+		userAttributes.FirstName,
+		userAttributes.LastName,
+		userAttributes.Email,
+		userAttributes.UserType).Scan(&userAttributes.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -47,13 +86,13 @@ func (r *mutationResolver) GenerateProfile(ctx context.Context, answers []*model
 
 // GetUserByID is the resolver for the getUserById field.
 func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*model.User, error) {
-	query := "SELECT * FROM user_account WHERE id = $1"
+	query := "SELECT * FROM users WHERE id = $1"
 
 	row := r.DB.QueryRow(ctx, query, id)
 
 	var user model.User
 
-	rowError := row.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.InvestorProfile)
+	rowError := row.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email)
 	if rowError != nil {
 		return nil, rowError
 	}
@@ -65,7 +104,7 @@ func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*model.User
 func (r *queryResolver) GetQuestion(ctx context.Context, index *int32) (*model.Question, error) {
 	// if there is no index provided, or if the index is 0, return the first question.
 	if (index == nil) || (*index == 0) {
-		question := interview.Questions[0]
+		question := interview.InvestorQuestions[0]
 
 		return &model.Question{
 			QuestionTitle:  question.QuestionTitle,
@@ -75,7 +114,7 @@ func (r *queryResolver) GetQuestion(ctx context.Context, index *int32) (*model.Q
 		}, nil
 	}
 
-	questionsLength := int32(len(interview.Questions))
+	questionsLength := int32(len(interview.InvestorQuestions))
 	questionIsLast := *index == int32(questionsLength-1)
 
 	if *index >= questionsLength {
@@ -83,7 +122,7 @@ func (r *queryResolver) GetQuestion(ctx context.Context, index *int32) (*model.Q
 		return nil, fmt.Errorf("question with index %d not found, the largest index possible is %d", *index, (questionsLength - 1))
 	}
 
-	question := interview.Questions[*index]
+	question := interview.InvestorQuestions[*index]
 
 	return &model.Question{
 		QuestionTitle:  question.QuestionTitle,

@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
@@ -13,10 +15,20 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/furre-dev/homelaan-go-backend/database"
 	"github.com/furre-dev/homelaan-go-backend/graph"
+	"github.com/furre-dev/homelaan-go-backend/internal"
 	"github.com/go-chi/chi"
 	"github.com/rs/cors"
 	"github.com/vektah/gqlparser/v2/ast"
 )
+
+func protectedDirective(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
+	_, ok := internal.GetUserID(ctx)
+	if !ok {
+		return nil, fmt.Errorf("not authorized")
+	}
+	// Add more checks if needed (role-based, etc)
+	return next(ctx)
+}
 
 const defaultPort = "8000"
 
@@ -33,12 +45,18 @@ func main() {
 	router.Use(cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 		Debug:            true,
 	}).Handler)
 
-	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{DB: db}}))
+	router.Use(AuthMiddleware)
+
+	srv := handler.New(graph.NewExecutableSchema(graph.Config{
+		Resolvers: &graph.Resolver{DB: db},
+		Directives: graph.DirectiveRoot{
+			Protected: protectedDirective,
+		}}))
 
 	srv.AddTransport(transport.POST{})
 

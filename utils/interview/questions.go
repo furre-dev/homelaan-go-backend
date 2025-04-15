@@ -2,11 +2,10 @@ package interview
 
 import "github.com/furre-dev/homelaan-go-backend/graph/model"
 
-var Questions = []model.Question{
+var InvestorQuestions = []model.Question{
 	{
 		QuestionTitle: "Where are you currently living (city and country)?",
 		ProfileField:  "geo_info.location",
-		QuestionIndex: 0,
 	},
 	{
 		QuestionTitle: "How long have you lived abroad?",
@@ -57,15 +56,15 @@ var Questions = []model.Question{
 		ProfileField:  "network_market_access.local_business_diaspora_groups",
 	},
 	{
-		QuestionTitle: `Are you connected to specific ethnic, business, or professional diaspora groups locally? Please write all of them that apply! 
-										Advisory roles
-										Non-executive / Executive board positions
-										Business development / Opening doors
-										Commercial partnerships / Sales representation
-										Investment in startups
-										Investment in small/mid-sized businesses (SMBs)
-										Mentoring entrepreneurs
-										Operational involvement in ventures (interim leadership, turnaround, model
+		QuestionTitle: `What types of business opportunities are you open to engaging with? (Select all that apply):\n
+										Advisory roles,\n
+										Non-executive / Executive board positions,\n
+										Business development / Opening doors,\n
+										Commercial partnerships / Sales representation,\n
+										Investment in startups,\n
+										Investment in small/mid-sized businesses (SMBs),\n
+										Mentoring entrepreneurs,\n
+										Operational involvement in ventures (interim leadership, turnaround, etc.),\n
 										Co-founding new ventures
 	`,
 		ProfileField: "engagement_preferences.business_opportunities",
@@ -113,5 +112,12 @@ var Questions = []model.Question{
 	{
 		QuestionTitle: "If yes, what is their professional background and area of expertise?",
 		ProfileField:  "[spousal_involvement.spouse_professional_background, spousal_involvement.spouse_expertise_areas]",
+	},
+}
+
+var FounderQuestions = []model.Question{
+	{
+		QuestionTitle: "Could you please upload the PDF file of your pitch deck?",
+		ProfileField:  "spousal_involvement.spouse_interested",
 	},
 }
