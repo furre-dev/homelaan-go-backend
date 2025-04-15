@@ -9,6 +9,8 @@ import (
 	"github.com/furre-dev/homelaan-go-backend/internal"
 )
 
+// TODO: HANDLE VALIDATION THROUGH FIREBASE SDK
+
 // Dummy function. Replace this with real JWT verification or token lookup.
 func validateBearerToken(token string) (string, error) {
 	// Example: decode and verify JWT, then return user id or info.
