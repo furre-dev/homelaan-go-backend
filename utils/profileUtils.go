@@ -65,7 +65,7 @@ func GenerateUserProfile(questionsWithAnswers []*model.QuestionInput) (*model.In
 	}
 
 	client := openai.NewClient(
-		option.WithAPIKey("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"), // defaults to os.LookupEnv("OPENAI_API_KEY")
+		option.WithAPIKey(""), // defaults to os.LookupEnv("OPENAI_API_KEY")
 	)
 
 	var messages []openai.ChatCompletionMessageParamUnion
