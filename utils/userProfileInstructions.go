@@ -41,6 +41,12 @@ The model should return a structured JSON object that strictly follows the **Zod
 - Ensure proper formatting (e.g., capitalizing names, standardizing industry terms).  
 
 
-## IMPORTANT ## 
+## IMPORTANT ##
 - return value as NULL instead of examples "", 0, []
+`
+
+const UserTypeInstructions = `
+You are an assistant who will try to determine if a user type is Founder or Investor.
+
+**IF USER IS ADVISOR ASSIGN INVESTOR, IF USER IS INVESTOR ASSIGN INVESTOR, IF USER IS FOUNDER ASSIGN FOUNDER**
 `

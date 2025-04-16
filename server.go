@@ -18,12 +18,14 @@ import (
 	"github.com/furre-dev/homelaan-go-backend/graph"
 	"github.com/furre-dev/homelaan-go-backend/internal"
 	"github.com/go-chi/chi"
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
 func protectedDirective(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
 	_, ok := internal.GetUserID(ctx)
+	print(ok)
 	if !ok {
 		return nil, fmt.Errorf("not authorized")
 	}
@@ -34,10 +36,16 @@ func protectedDirective(ctx context.Context, obj interface{}, next graphql.Resol
 const defaultPort = "8000"
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("No .env file found, relying on system environment variables")
+	}
+
 	db := database.ConnectDB()
 	defer db.Close(context.Background())
 
 	port := os.Getenv("PORT")
+
 	if port == "" {
 		port = defaultPort
 	}

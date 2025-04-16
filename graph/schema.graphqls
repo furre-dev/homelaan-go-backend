@@ -80,12 +80,10 @@ type SpousalInvolvement {
 }
 
 type Query {
-  GetUserByID(id: ID!): User! @protected
   GetQuestion(index: Int): Question! @protected
 }
 
 type Mutation {
-  AssignUserType(user_type: UserType!): User! @protected
   CreateUser(user_input: UserInput): User!
   GenerateProfile(answers: [QuestionInput!]!) : InvestorProfile! @protected
 }

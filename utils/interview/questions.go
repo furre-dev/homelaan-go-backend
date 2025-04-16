@@ -121,3 +121,7 @@ var FounderQuestions = []model.Question{
 		ProfileField:  "spousal_involvement.spouse_interested",
 	},
 }
+
+var UserTypeQuestion = model.Question{
+	QuestionTitle: "Quick question—are you an investor, advisor, or a founder?",
+}

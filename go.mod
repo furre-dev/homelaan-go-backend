@@ -8,6 +8,7 @@ require (
 	github.com/furre-dev/jsonschema-nullable v0.14.6
 	github.com/go-chi/chi v1.5.5
 	github.com/jackc/pgx/v5 v5.7.3
+	github.com/joho/godotenv v1.5.1
 	github.com/openai/openai-go v0.1.0-beta.3
 	github.com/rs/cors v1.11.1
 	github.com/vektah/gqlparser/v2 v2.5.23
