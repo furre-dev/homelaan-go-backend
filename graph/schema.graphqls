@@ -85,7 +85,7 @@ type Query {
 }
 
 type Mutation {
-  AssignUserType(user_type: UserTypeInput!): User! @protected
+  AssignUserType(user_type: UserType!): User! @protected
   CreateUser(user_input: UserInput): User!
   GenerateProfile(answers: [QuestionInput!]!) : InvestorProfile! @protected
 }

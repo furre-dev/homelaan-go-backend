@@ -15,7 +15,7 @@ import (
 )
 
 // AssignUserType is the resolver for the AssignUserType field.
-func (r *mutationResolver) AssignUserType(ctx context.Context, userType model.UserTypeInput) (*model.User, error) {
+func (r *mutationResolver) AssignUserType(ctx context.Context, userType model.UserType) (*model.User, error) {
 	userID, ok := internal.GetUserID(ctx)
 
 	if !ok || userID == "" {
@@ -29,7 +29,7 @@ func (r *mutationResolver) AssignUserType(ctx context.Context, userType model.Us
 	// Assuming userType.UserID contains the ID of the user to update.
 	// Also assuming that userType.Type contains the new user type to assign.
 	var updatedUser model.User
-	err := r.DB.QueryRow(ctx, query, userType.UserType, userType.ID).Scan(
+	err := r.DB.QueryRow(ctx, query, userType, userID).Scan(
 		&updatedUser.ID,
 		&updatedUser.FirstName,
 		&updatedUser.LastName,

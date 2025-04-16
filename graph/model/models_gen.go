@@ -183,11 +183,6 @@ type UserInput struct {
 	UserType  *UserType `json:"user_type"`
 }
 
-type UserTypeInput struct {
-	UserType UserType `json:"user_type"`
-	ID       string   `json:"id"`
-}
-
 type BusinessOpportunities string
 
 const (

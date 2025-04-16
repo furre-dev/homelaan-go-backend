@@ -89,7 +89,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AssignUserType  func(childComplexity int, userType model.UserTypeInput) int
+		AssignUserType  func(childComplexity int, userType model.UserType) int
 		CreateUser      func(childComplexity int, userInput *model.UserInput) int
 		GenerateProfile func(childComplexity int, answers []*model.QuestionInput) int
 	}
@@ -146,7 +146,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	AssignUserType(ctx context.Context, userType model.UserTypeInput) (*model.User, error)
+	AssignUserType(ctx context.Context, userType model.UserType) (*model.User, error)
 	CreateUser(ctx context.Context, userInput *model.UserInput) (*model.User, error)
 	GenerateProfile(ctx context.Context, answers []*model.QuestionInput) (*model.InvestorProfile, error)
 }
@@ -338,7 +338,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AssignUserType(childComplexity, args["user_type"].(model.UserTypeInput)), true
+		return e.complexity.Mutation.AssignUserType(childComplexity, args["user_type"].(model.UserType)), true
 
 	case "Mutation.CreateUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -597,7 +597,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputQuestionInput,
 		ec.unmarshalInputSpousalInvolvementInput,
 		ec.unmarshalInputUserInput,
-		ec.unmarshalInputUserTypeInput,
 	)
 	first := true
 
@@ -731,13 +730,13 @@ func (ec *executionContext) field_Mutation_AssignUserType_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_AssignUserType_argsUserType(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (model.UserTypeInput, error) {
+) (model.UserType, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("user_type"))
 	if tmp, ok := rawArgs["user_type"]; ok {
-		return ec.unmarshalNUserTypeInput2githubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐUserTypeInput(ctx, tmp)
+		return ec.unmarshalNUserType2githubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐUserType(ctx, tmp)
 	}
 
-	var zeroVal model.UserTypeInput
+	var zeroVal model.UserType
 	return zeroVal, nil
 }
 
@@ -1970,7 +1969,7 @@ func (ec *executionContext) _Mutation_AssignUserType(ctx context.Context, field 
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		directive0 := func(rctx context.Context) (any, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().AssignUserType(rctx, fc.Args["user_type"].(model.UserTypeInput))
+			return ec.resolvers.Mutation().AssignUserType(rctx, fc.Args["user_type"].(model.UserType))
 		}
 
 		directive1 := func(ctx context.Context) (any, error) {
@@ -6177,40 +6176,6 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUserTypeInput(ctx context.Context, obj any) (model.UserTypeInput, error) {
-	var it model.UserTypeInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"user_type", "id"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "user_type":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("user_type"))
-			data, err := ec.unmarshalNUserType2githubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐUserType(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UserType = data
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -7462,11 +7427,6 @@ func (ec *executionContext) unmarshalNUserType2githubᚗcomᚋfurreᚑdevᚋhome
 
 func (ec *executionContext) marshalNUserType2githubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐUserType(ctx context.Context, sel ast.SelectionSet, v model.UserType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) unmarshalNUserTypeInput2githubᚗcomᚋfurreᚑdevᚋhomelaanᚑgoᚑbackendᚋgraphᚋmodelᚐUserTypeInput(ctx context.Context, v any) (model.UserTypeInput, error) {
-	res, err := ec.unmarshalInputUserTypeInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

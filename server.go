@@ -13,6 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/furre-dev/homelaan-go-backend/auth"
 	"github.com/furre-dev/homelaan-go-backend/database"
 	"github.com/furre-dev/homelaan-go-backend/graph"
 	"github.com/furre-dev/homelaan-go-backend/internal"
@@ -50,7 +51,7 @@ func main() {
 		Debug:            true,
 	}).Handler)
 
-	router.Use(AuthMiddleware)
+	router.Use(auth.AuthMiddleware)
 
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{
 		Resolvers: &graph.Resolver{DB: db},

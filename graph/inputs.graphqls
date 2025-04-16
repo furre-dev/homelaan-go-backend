@@ -70,8 +70,3 @@ input SpousalInvolvementInput {
   spouse_professional_background: String
   spouse_expertise_areas: [String]
 }
-
-input UserTypeInput {
-  user_type: UserType!,
-  id: ID!
-}
