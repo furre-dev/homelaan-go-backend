@@ -1,0 +1,4 @@
+type ChatSession {
+  id: ID!
+  created_at: DateTime!
+}

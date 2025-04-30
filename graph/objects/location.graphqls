@@ -1,0 +1,9 @@
+type Location {
+  city: String
+  country: String
+}
+
+input LocationInput{
+  city: String
+  country: String
+}

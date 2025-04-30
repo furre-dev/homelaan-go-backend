@@ -1,0 +1,104 @@
+# This schema defines the CompanyProfile used for matching companies with potential investors
+# It mirrors many of the attributes in the InvestorProfile in order to achieve accurate matching
+
+type CompanyProfile {
+  location_info: CompanyGeographicProfile!
+  business_background: BusinessBackground!
+  network_outreach: NetworkOutreach!
+  engagement_preferences: CompanyEngagementPreferences!
+  funding_requirements: FundingRequirements!
+  operational_commitment: OperationalCommitment!
+  additional_info: String
+}
+
+# Geographic information about where the company is based and its global presence
+type CompanyGeographicProfile {
+  location: Location!
+  years_in_operation: Int
+  global_presence: Boolean
+  headquarters_status: HeadquartersStatus
+}
+
+# Enum describing the status of the company headquarters
+enum HeadquartersStatus {
+  LOCAL
+  INTERNATIONAL
+  MULTINATIONAL
+}
+
+# Background information representing the company’s business overview and expertise areas
+type BusinessBackground {
+  organization_name: String
+  current_stage: String         # E.g., Startup, Growth, Mature, etc.
+  industry: String
+  business_overview: String
+  expertise_areas: [String]
+  size: String                  # E.g., Small, Medium, or Large enterprise
+  decision_making_scope: String # E.g., Centralized or Decentralized decisions
+}
+
+# Information about the company’s current network outreach 
+type NetworkOutreach {
+  target_investor_industries: [String]
+  existing_investor_contacts: [InvestorContact]
+  strategic_partnerships: [String]
+}
+
+type InvestorContact {
+  full_name: String!
+  email: String
+  role: String
+  organization: String
+  linkedin_url: String
+  connection_strength: Int!
+  notes: String
+}
+
+
+# Preferences regarding how a company wishes to engage with investors
+type CompanyEngagementPreferences {
+  investor_opportunities: [InvestorOpportunities]
+  sectors_of_interest: [String]
+  preferred_investor_geographies: [String]
+}
+
+# Enum representing the types of opportunities companies are looking for from investors
+enum InvestorOpportunities {
+  FUNDING
+  MENTORSHIP
+  STRATEGIC_GUIDANCE
+  NETWORK_ACCESS
+}
+
+# Details about the funding a company is seeking
+type FundingRequirements {
+  required_investment_amount: InvestmentRange
+  funding_stage: FundingStage
+  equity_offered: Float          # Percentage of ownership offered in exchange for the investment
+  preferred_investor_type: [InvestorType]
+}
+
+# Enum defining various stages of funding
+enum FundingStage {
+  SEED
+  SERIES_A
+  SERIES_B
+  SERIES_C
+  PRIVATE_EQUITY
+}
+
+# Enum defining different types of investors a company might consider
+enum InvestorType {
+  ANGEL
+  VENTURE
+  PRIVATE_EQUITY
+  CORPORATE
+  STRATEGIC
+}
+
+# Information about the company’s operational commitment and expectations
+type OperationalCommitment {
+  monthly_operational_hours: Int
+  project_duration_expectation: [ProjectDurationPreference]
+  flexibility_to_pitch: Boolean   # Represents the readiness to present and adjust proposals as needed
+}

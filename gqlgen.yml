@@ -3,7 +3,7 @@ enable_model_json_omitempty_tag: false
 
 # Where are all the schema files located? globs are supported eg  src/**/*.graphqls
 schema:
-  - graph/*.graphqls
+  - graph/**/*.graphqls
 
 # Where should the generated server code go?
 exec:
@@ -139,7 +139,10 @@ models:
   UUID:
     model:
       - github.com/99designs/gqlgen/graphql.UUID
-
+  DateTime:
+    model:
+      - github.com/nrfta/go-graphql-scalars.DateTime
+      - github.com/nrfta/go-graphql-scalars.NullDateTime
   # The GraphQL spec explicitly states that the Int type is a signed 32-bit
   # integer. Using Go int or int64 to represent it can lead to unexpected
   # behavior, and some GraphQL tools like Apollo Router will fail when

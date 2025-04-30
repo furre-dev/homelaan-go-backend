@@ -1,0 +1,59 @@
+input InvestorProfileInput {
+  geo_info: PersonalGeographicProfileInput
+  professional_background: ProfessionalBackgroundInput
+  network_market_access: NetworkMarketAccessInput
+  engagement_preferences: EngagementPreferencesInput
+  investment_appetite: InvestmentAppetiteInput
+  availability_and_commitment: AvailabilityCommitmentInput
+  spousal_involvement: SpousalInvolvementInput
+  additional_info: String
+}
+
+input PersonalGeographicProfileInput {
+  location: LocationInput
+  years_abroad: Int
+  will_stay_long_term_in_current_location: Boolean
+  has_family_abroad: Boolean
+  residency_status: ResidencyStatus
+}
+
+input ProfessionalBackgroundInput {
+  current_role: String
+  organization: String
+  industry: String
+  career_overview: String
+  expertise_areas: [String]
+  seniority_level: String
+  decision_making_scope: String
+}
+
+input NetworkMarketAccessInput {
+  industries_with_strong_network: [String]
+  professional_contacts: ProfessionalContacts
+  local_business_diaspora_groups: [String]
+}
+
+input EngagementPreferencesInput {
+  business_opportunities: [BusinessOpportunities]
+  sectors_of_interest: [String]
+  opportunity_locations: [OpportunityLocations]
+}
+
+input InvestmentAppetiteInput {
+  active_investor_in_startups_or_small_mid_businesses: Boolean
+  investment_range: InvestmentRangeInput
+  angel_group_membership: Boolean
+  involvement_type: [InvolvementType]
+}
+
+input AvailabilityCommitmentInput {
+  monthly_commitment_hours: Int
+  project_duration_preference: [ProjectDurationPreference]
+  willingness_to_travel: Boolean
+}
+
+input SpousalInvolvementInput {
+  spouse_interested: Boolean
+  spouse_professional_background: String
+  spouse_expertise_areas: [String]
+}

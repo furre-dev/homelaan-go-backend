@@ -3,9 +3,11 @@
 package model
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 )
 
 type AvailabilityCommitment struct {
@@ -20,6 +22,77 @@ type AvailabilityCommitmentInput struct {
 	WillingnessToTravel       *bool                        `json:"willingness_to_travel"`
 }
 
+type BusinessBackground struct {
+	OrganizationName    *string   `json:"organization_name"`
+	CurrentStage        *string   `json:"current_stage"`
+	Industry            *string   `json:"industry"`
+	BusinessOverview    *string   `json:"business_overview"`
+	ExpertiseAreas      []*string `json:"expertise_areas"`
+	Size                *string   `json:"size"`
+	DecisionMakingScope *string   `json:"decision_making_scope"`
+}
+
+type BusinessBackgroundInput struct {
+	OrganizationName    *string   `json:"organization_name"`
+	CurrentStage        *string   `json:"current_stage"`
+	Industry            *string   `json:"industry"`
+	BusinessOverview    *string   `json:"business_overview"`
+	ExpertiseAreas      []*string `json:"expertise_areas"`
+	Size                *string   `json:"size"`
+	DecisionMakingScope *string   `json:"decision_making_scope"`
+}
+
+type ChatSession struct {
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type CompanyEngagementPreferences struct {
+	InvestorOpportunities        []*InvestorOpportunities `json:"investor_opportunities"`
+	SectorsOfInterest            []*string                `json:"sectors_of_interest"`
+	PreferredInvestorGeographies []*string                `json:"preferred_investor_geographies"`
+}
+
+type CompanyEngagementPreferencesInput struct {
+	InvestorOpportunities        []*InvestorOpportunities `json:"investor_opportunities"`
+	SectorsOfInterest            []*string                `json:"sectors_of_interest"`
+	PreferredInvestorGeographies []*string                `json:"preferred_investor_geographies"`
+}
+
+type CompanyGeographicProfile struct {
+	Location           *Location           `json:"location"`
+	YearsInOperation   *int32              `json:"years_in_operation"`
+	GlobalPresence     *bool               `json:"global_presence"`
+	HeadquartersStatus *HeadquartersStatus `json:"headquarters_status"`
+}
+
+type CompanyGeographicProfileInput struct {
+	Location           *LocationInput      `json:"location"`
+	YearsInOperation   *int32              `json:"years_in_operation"`
+	GlobalPresence     *bool               `json:"global_presence"`
+	HeadquartersStatus *HeadquartersStatus `json:"headquarters_status"`
+}
+
+type CompanyProfile struct {
+	LocationInfo          *CompanyGeographicProfile     `json:"location_info"`
+	BusinessBackground    *BusinessBackground           `json:"business_background"`
+	NetworkOutreach       *NetworkOutreach              `json:"network_outreach"`
+	EngagementPreferences *CompanyEngagementPreferences `json:"engagement_preferences"`
+	FundingRequirements   *FundingRequirements          `json:"funding_requirements"`
+	OperationalCommitment *OperationalCommitment        `json:"operational_commitment"`
+	AdditionalInfo        *string                       `json:"additional_info"`
+}
+
+type CompanyProfileInput struct {
+	LocationInfo          *CompanyGeographicProfileInput     `json:"location_info"`
+	BusinessBackground    *BusinessBackgroundInput           `json:"business_background"`
+	NetworkOutreach       *NetworkOutreachInput              `json:"network_outreach"`
+	EngagementPreferences *CompanyEngagementPreferencesInput `json:"engagement_preferences"`
+	FundingRequirements   *FundingRequirementsInput          `json:"funding_requirements"`
+	OperationalCommitment *OperationalCommitmentInput        `json:"operational_commitment"`
+	AdditionalInfo        *string                            `json:"additional_info"`
+}
+
 type EngagementPreferences struct {
 	BusinessOpportunities []*BusinessOpportunities `json:"business_opportunities"`
 	SectorsOfInterest     []*string                `json:"sectors_of_interest"`
@@ -30,6 +103,20 @@ type EngagementPreferencesInput struct {
 	BusinessOpportunities []*BusinessOpportunities `json:"business_opportunities"`
 	SectorsOfInterest     []*string                `json:"sectors_of_interest"`
 	OpportunityLocations  []*OpportunityLocations  `json:"opportunity_locations"`
+}
+
+type FundingRequirements struct {
+	RequiredInvestmentAmount *InvestmentRange `json:"required_investment_amount"`
+	FundingStage             *FundingStage    `json:"funding_stage"`
+	EquityOffered            *float64         `json:"equity_offered"`
+	PreferredInvestorType    []*InvestorType  `json:"preferred_investor_type"`
+}
+
+type FundingRequirementsInput struct {
+	RequiredInvestmentAmount *InvestmentRangeInput `json:"required_investment_amount"`
+	FundingStage             *FundingStage         `json:"funding_stage"`
+	EquityOffered            *float64              `json:"equity_offered"`
+	PreferredInvestorType    []*InvestorType       `json:"preferred_investor_type"`
 }
 
 type InvestmentAppetite struct {
@@ -54,6 +141,26 @@ type InvestmentRange struct {
 type InvestmentRangeInput struct {
 	FromUsd *int32 `json:"from_usd"`
 	ToUsd   *int32 `json:"to_usd"`
+}
+
+type InvestorContact struct {
+	FullName           string  `json:"full_name"`
+	Email              *string `json:"email"`
+	Role               *string `json:"role"`
+	Organization       *string `json:"organization"`
+	LinkedinURL        *string `json:"linkedin_url"`
+	ConnectionStrength int32   `json:"connection_strength"`
+	Notes              *string `json:"notes"`
+}
+
+type InvestorContactInput struct {
+	FullName           string  `json:"full_name"`
+	Email              *string `json:"email"`
+	Role               *string `json:"role"`
+	Organization       *string `json:"organization"`
+	LinkedinURL        *string `json:"linkedin_url"`
+	ConnectionStrength int32   `json:"connection_strength"`
+	Notes              *string `json:"notes"`
 }
 
 type InvestorProfile struct {
@@ -88,6 +195,21 @@ type LocationInput struct {
 	Country *string `json:"country"`
 }
 
+type Message struct {
+	ID        string    `json:"id"`
+	SessionID string    `json:"session_id"`
+	Sender    Sender    `json:"sender"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type MessageInput struct {
+	SessionID string    `json:"session_id"`
+	Sender    Sender    `json:"sender"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
 type Mutation struct {
 }
 
@@ -101,6 +223,30 @@ type NetworkMarketAccessInput struct {
 	IndustriesWithStrongNetwork []*string             `json:"industries_with_strong_network"`
 	ProfessionalContacts        *ProfessionalContacts `json:"professional_contacts"`
 	LocalBusinessDiasporaGroups []*string             `json:"local_business_diaspora_groups"`
+}
+
+type NetworkOutreach struct {
+	TargetInvestorIndustries []*string          `json:"target_investor_industries"`
+	ExistingInvestorContacts []*InvestorContact `json:"existing_investor_contacts"`
+	StrategicPartnerships    []*string          `json:"strategic_partnerships"`
+}
+
+type NetworkOutreachInput struct {
+	TargetInvestorIndustries []*string               `json:"target_investor_industries"`
+	ExistingInvestorContacts []*InvestorContactInput `json:"existing_investor_contacts"`
+	StrategicPartnerships    []*string               `json:"strategic_partnerships"`
+}
+
+type OperationalCommitment struct {
+	MonthlyOperationalHours    *int32                       `json:"monthly_operational_hours"`
+	ProjectDurationExpectation []*ProjectDurationPreference `json:"project_duration_expectation"`
+	FlexibilityToPitch         *bool                        `json:"flexibility_to_pitch"`
+}
+
+type OperationalCommitmentInput struct {
+	MonthlyOperationalHours    *int32                       `json:"monthly_operational_hours"`
+	ProjectDurationExpectation []*ProjectDurationPreference `json:"project_duration_expectation"`
+	FlexibilityToPitch         *bool                        `json:"flexibility_to_pitch"`
 }
 
 type PersonalGeographicProfile struct {
@@ -238,6 +384,258 @@ func (e BusinessOpportunities) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+func (e *BusinessOpportunities) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e BusinessOpportunities) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+type FundingStage string
+
+const (
+	FundingStageSeed          FundingStage = "SEED"
+	FundingStageSeriesA       FundingStage = "SERIES_A"
+	FundingStageSeriesB       FundingStage = "SERIES_B"
+	FundingStageSeriesC       FundingStage = "SERIES_C"
+	FundingStagePrivateEquity FundingStage = "PRIVATE_EQUITY"
+)
+
+var AllFundingStage = []FundingStage{
+	FundingStageSeed,
+	FundingStageSeriesA,
+	FundingStageSeriesB,
+	FundingStageSeriesC,
+	FundingStagePrivateEquity,
+}
+
+func (e FundingStage) IsValid() bool {
+	switch e {
+	case FundingStageSeed, FundingStageSeriesA, FundingStageSeriesB, FundingStageSeriesC, FundingStagePrivateEquity:
+		return true
+	}
+	return false
+}
+
+func (e FundingStage) String() string {
+	return string(e)
+}
+
+func (e *FundingStage) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FundingStage(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FundingStage", str)
+	}
+	return nil
+}
+
+func (e FundingStage) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *FundingStage) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e FundingStage) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+type HeadquartersStatus string
+
+const (
+	HeadquartersStatusLocal         HeadquartersStatus = "LOCAL"
+	HeadquartersStatusInternational HeadquartersStatus = "INTERNATIONAL"
+	HeadquartersStatusMultinational HeadquartersStatus = "MULTINATIONAL"
+)
+
+var AllHeadquartersStatus = []HeadquartersStatus{
+	HeadquartersStatusLocal,
+	HeadquartersStatusInternational,
+	HeadquartersStatusMultinational,
+}
+
+func (e HeadquartersStatus) IsValid() bool {
+	switch e {
+	case HeadquartersStatusLocal, HeadquartersStatusInternational, HeadquartersStatusMultinational:
+		return true
+	}
+	return false
+}
+
+func (e HeadquartersStatus) String() string {
+	return string(e)
+}
+
+func (e *HeadquartersStatus) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = HeadquartersStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid HeadquartersStatus", str)
+	}
+	return nil
+}
+
+func (e HeadquartersStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *HeadquartersStatus) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e HeadquartersStatus) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+type InvestorOpportunities string
+
+const (
+	InvestorOpportunitiesFunding           InvestorOpportunities = "FUNDING"
+	InvestorOpportunitiesMentorship        InvestorOpportunities = "MENTORSHIP"
+	InvestorOpportunitiesStrategicGUIDAnce InvestorOpportunities = "STRATEGIC_GUIDANCE"
+	InvestorOpportunitiesNetworkAccess     InvestorOpportunities = "NETWORK_ACCESS"
+)
+
+var AllInvestorOpportunities = []InvestorOpportunities{
+	InvestorOpportunitiesFunding,
+	InvestorOpportunitiesMentorship,
+	InvestorOpportunitiesStrategicGUIDAnce,
+	InvestorOpportunitiesNetworkAccess,
+}
+
+func (e InvestorOpportunities) IsValid() bool {
+	switch e {
+	case InvestorOpportunitiesFunding, InvestorOpportunitiesMentorship, InvestorOpportunitiesStrategicGUIDAnce, InvestorOpportunitiesNetworkAccess:
+		return true
+	}
+	return false
+}
+
+func (e InvestorOpportunities) String() string {
+	return string(e)
+}
+
+func (e *InvestorOpportunities) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InvestorOpportunities(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InvestorOpportunities", str)
+	}
+	return nil
+}
+
+func (e InvestorOpportunities) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *InvestorOpportunities) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e InvestorOpportunities) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+type InvestorType string
+
+const (
+	InvestorTypeAngel         InvestorType = "ANGEL"
+	InvestorTypeVenture       InvestorType = "VENTURE"
+	InvestorTypePrivateEquity InvestorType = "PRIVATE_EQUITY"
+	InvestorTypeCorporate     InvestorType = "CORPORATE"
+	InvestorTypeStrategic     InvestorType = "STRATEGIC"
+)
+
+var AllInvestorType = []InvestorType{
+	InvestorTypeAngel,
+	InvestorTypeVenture,
+	InvestorTypePrivateEquity,
+	InvestorTypeCorporate,
+	InvestorTypeStrategic,
+}
+
+func (e InvestorType) IsValid() bool {
+	switch e {
+	case InvestorTypeAngel, InvestorTypeVenture, InvestorTypePrivateEquity, InvestorTypeCorporate, InvestorTypeStrategic:
+		return true
+	}
+	return false
+}
+
+func (e InvestorType) String() string {
+	return string(e)
+}
+
+func (e *InvestorType) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InvestorType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InvestorType", str)
+	}
+	return nil
+}
+
+func (e InvestorType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *InvestorType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e InvestorType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 type InvolvementType string
 
 const (
@@ -277,6 +675,20 @@ func (e *InvolvementType) UnmarshalGQL(v any) error {
 
 func (e InvolvementType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *InvolvementType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e InvolvementType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type OpportunityLocations string
@@ -320,6 +732,20 @@ func (e *OpportunityLocations) UnmarshalGQL(v any) error {
 
 func (e OpportunityLocations) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *OpportunityLocations) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e OpportunityLocations) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ProfessionalContacts string
@@ -367,6 +793,20 @@ func (e ProfessionalContacts) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+func (e *ProfessionalContacts) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ProfessionalContacts) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 type ProjectDurationPreference string
 
 const (
@@ -406,6 +846,20 @@ func (e *ProjectDurationPreference) UnmarshalGQL(v any) error {
 
 func (e ProjectDurationPreference) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ProjectDurationPreference) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ProjectDurationPreference) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ResidencyStatus string
@@ -483,6 +937,75 @@ func (e ResidencyStatus) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+func (e *ResidencyStatus) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ResidencyStatus) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+type Sender string
+
+const (
+	SenderUser      Sender = "USER"
+	SenderAssistant Sender = "ASSISTANT"
+)
+
+var AllSender = []Sender{
+	SenderUser,
+	SenderAssistant,
+}
+
+func (e Sender) IsValid() bool {
+	switch e {
+	case SenderUser, SenderAssistant:
+		return true
+	}
+	return false
+}
+
+func (e Sender) String() string {
+	return string(e)
+}
+
+func (e *Sender) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Sender(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Sender", str)
+	}
+	return nil
+}
+
+func (e Sender) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *Sender) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e Sender) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 type UserType string
 
 const (
@@ -522,4 +1045,18 @@ func (e *UserType) UnmarshalGQL(v any) error {
 
 func (e UserType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *UserType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e UserType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }

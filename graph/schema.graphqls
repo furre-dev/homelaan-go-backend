@@ -6,84 +6,15 @@
 
 directive @protected on FIELD_DEFINITION
 
-type User {
-  id: ID!
-  first_name: String!
-  last_name: String!
-  email: String!
-  user_type: UserType
-}
-
-type InvestorProfile {
-  geo_info: PersonalGeographicProfile!
-  professional_background: ProfessionalBackground!
-  network_market_access: NetworkMarketAccess!
-  engagement_preferences: EngagementPreferences!
-  investment_appetite: InvestmentAppetite!
-  availability_and_commitment: AvailabilityCommitment!
-  spousal_involvement: SpousalInvolvement!
-  additional_info: String
-}
-
-type Location {
-  city: String
-  country: String
-}
-
-type PersonalGeographicProfile {
-  location: Location
-  years_abroad: Int
-  will_stay_long_term_in_current_location: Boolean
-  has_family_abroad: Boolean
-  residency_status: ResidencyStatus
-}
-
-type ProfessionalBackground {
-  current_role: String
-  organization: String
-  industry: String
-  career_overview: String
-  expertise_areas: [String]
-  seniority_level: String
-  decision_making_scope: String
-}
-
-type NetworkMarketAccess {
-  industries_with_strong_network: [String]
-  professional_contacts: ProfessionalContacts
-  local_business_diaspora_groups: [String]
-}
-
-type EngagementPreferences {
-  business_opportunities: [BusinessOpportunities]
-  sectors_of_interest: [String]
-  opportunity_locations: [OpportunityLocations]
-}
-
-type InvestmentAppetite {
-  active_investor_in_startups_or_small_mid_businesses: Boolean
-  investment_range: InvestmentRange
-  angel_group_membership: Boolean
-  involvement_type: [InvolvementType]
-}
-
-type AvailabilityCommitment {
-  monthly_commitment_hours: Int
-  project_duration_preference: [ProjectDurationPreference]
-  willingness_to_travel: Boolean
-}
-
-type SpousalInvolvement {
-  spouse_interested: Boolean
-  spouse_professional_background: String
-  spouse_expertise_areas: [String]
-}
-
 type Query {
   GetQuestion(index: Int): Question! @protected
 }
 
 type Mutation {
   CreateUser(user_input: UserInput): User!
-  GenerateProfile(answers: [QuestionInput!]!) : InvestorProfile! @protected
+  CreateProifle(answers: [QuestionInput!]!) : InvestorProfile! @protected
+  CreateNewCompany(answers: [QuestionInput!]!) : CompanyProfile! @protected
+  AssignUserType(user_type: UserType!): User! @protected
+  ConnectToChatSession: ChatSession! @protected
+  SendMessage(message: MessageInput!): ID! @protected
 }

@@ -1,0 +1,75 @@
+# ... (existing types from your schema above)
+
+##########################
+# INPUT TYPES SECTION
+##########################
+
+# CompanyProfile Input
+input CompanyProfileInput {
+  location_info: CompanyGeographicProfileInput!
+  business_background: BusinessBackgroundInput!
+  network_outreach: NetworkOutreachInput!
+  engagement_preferences: CompanyEngagementPreferencesInput!
+  funding_requirements: FundingRequirementsInput!
+  operational_commitment: OperationalCommitmentInput!
+  additional_info: String
+}
+
+# Geographic Information Input
+input CompanyGeographicProfileInput {
+  location: LocationInput!
+  years_in_operation: Int
+  global_presence: Boolean
+  headquarters_status: HeadquartersStatus
+}
+
+# Business Background Input
+input BusinessBackgroundInput {
+  organization_name: String
+  current_stage: String
+  industry: String
+  business_overview: String
+  expertise_areas: [String]
+  size: String
+  decision_making_scope: String
+}
+
+# Network Outreach Input
+input NetworkOutreachInput {
+  target_investor_industries: [String]
+  existing_investor_contacts: [InvestorContactInput]
+  strategic_partnerships: [String]
+}
+
+input InvestorContactInput {
+  full_name: String!
+  email: String
+  role: String
+  organization: String
+  linkedin_url: String
+  connection_strength: Int!
+  notes: String
+}
+
+
+# Engagement Preferences Input
+input CompanyEngagementPreferencesInput {
+  investor_opportunities: [InvestorOpportunities]
+  sectors_of_interest: [String]
+  preferred_investor_geographies: [String]
+}
+
+# Funding Requirements Input
+input FundingRequirementsInput {
+  required_investment_amount: InvestmentRangeInput
+  funding_stage: FundingStage
+  equity_offered: Float
+  preferred_investor_type: [InvestorType]
+}
+
+# Operational Commitment Input
+input OperationalCommitmentInput {
+  monthly_operational_hours: Int
+  project_duration_expectation: [ProjectDurationPreference]
+  flexibility_to_pitch: Boolean
+}

@@ -1,0 +1,19 @@
+enum Sender {
+  USER,
+  ASSISTANT
+}
+
+type Message {
+  id: ID!
+  session_id: ID!
+  sender: Sender!
+  content: String!
+  created_at: DateTime!
+}
+
+input MessageInput {
+  session_id: ID!
+  sender: Sender!
+  content: String!
+  created_at: DateTime!
+}
